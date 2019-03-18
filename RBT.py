@@ -159,7 +159,7 @@ class RedBlackTree:
         if self.size == 0:
             self.root = z
             self.size += 1
-            print key 
+            print key, 
             print 'key inserted as root'
 
         else:
@@ -174,12 +174,14 @@ class RedBlackTree:
                 self.root = z # case for tree being empty
             elif z.key < y.key:
                 y.leftChild = z
-                print key 
-                print 'key inserted as a left child'
+                print key, 
+                print 'inserted as a left child of ',
+                print y.key
             else:
                 y.rightChild = z
-                print key 
-                print 'key inserted as a right child'
+                print key, 
+                print ' inserted as a right child of',
+                print y.key
             z.leftChild = self.sentinel
             z.rightChild = self.sentinel
             z.color = 'red'
