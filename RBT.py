@@ -148,33 +148,70 @@ class RedBlackTree:
     '''
 
     def insert(self, key):
-        # add a key to the tree. Don't forget to fix up the tree and balance the nodes.
+        # add a key to the tree.Don't forget to fix up the tree and balance the nodes.
         #root does not exist yet 
 
         y = self.sentinel
         x = self.root
         z = RB_Node(key, self.sentinel, self.sentinel, self.sentinel, 'red')
 
-        while x != self.sentinel:
-            y = x
-            if z.key < x.key:
-                x = x.leftChild
-            else:
-                x = x.rightChild
-        z.parent = y
-        if y == self.sentinel:
-            self.root = z # case for tree being empty
-        elif z.key < y.key:
-            y.leftChild = z
+        #insert case for when tree is empty
+        if self.size == 0:
+            self.root = z
+            self.size += 1
+            print key 
+            print 'key inserted as root'
+
         else:
-            y.rightChild = z
-        z.leftChild = self.sentinel
-        z.rightChild = self.sentinel
-        z.color = 'red'
+            while x != self.sentinel:
+                y = x
+                if z.key < x.key:
+                    x = x.leftChild
+                else:
+                    x = x.rightChild
+            z.parent = y
+            if y == self.sentinel:
+                self.root = z # case for tree being empty
+            elif z.key < y.key:
+                y.leftChild = z
+                print key 
+                print 'key inserted as a left child'
+            else:
+                y.rightChild = z
+                print key 
+                print 'key inserted as a right child'
+            z.leftChild = self.sentinel
+            z.rightChild = self.sentinel
+            z.color = 'red'
+            self.size += 1
 
                     
     def _rbInsertFixup(self, z):
         # write a function to balance your tree after inserting
+        
+        #case 0 - z is the root
+        #color z black
+
+        #case 1 - z's uncle is red
+        #recolor z's grandparent, parent, and uncle black
+
+        #case 2 - z's uncle is black (triangle)
+        #case 2a - z is left child and z.parent is right child
+            #single rotate right z.parent
+        #case 2b - z is right child and z.parent is left child
+            #single rotate left z.parent
+
+        #case 3 - z's uncle is black (line)
+        #z and z.parent are both the same child to their
+        #respective parents
+
+            #case 3a - z and z.parent are left children
+                #rotate z.grandparent right
+                #recolor original z.parent and z.grandparent
+            #case 3a - z and z.parent are right children
+                #rotate z.grandparent left
+                #recolor original z.parent and z.grandparent
+
         pass
 
     def _rb_Delete_Fixup(self, x):
