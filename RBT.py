@@ -189,6 +189,7 @@ class RedBlackTree:
 
                     
     def _rbInsertFixup(self, z):
+        print 'insert fixedup called' 
         # write a function to balance your tree after inserting
         
         #case 0 - z is the root
@@ -217,6 +218,7 @@ class RedBlackTree:
         pass
 
     def _rb_Delete_Fixup(self, x):
+        print 'delete fixup called' 
         # receives a node, x, and fixes up the tree, balancing from x.
         pass
 
