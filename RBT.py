@@ -155,11 +155,11 @@ class RedBlackTree:
         x = self.root
         z = RB_Node(key, self.sentinel, self.sentinel, self.sentinel, 'red')
 
-        if x == None:
+        if x == None:               #insert a node for root if the tree is empty
             self.root = z
             x = self.root
 
-        while x != self.sentinel:
+        while x != self.sentinel:   #move down the tree until hitting a sentinel node
             y = x
             if z.key < x.key:
                 x = x.leftChild
@@ -169,12 +169,12 @@ class RedBlackTree:
         if y == self.sentinel:
             self.root = z # case for tree being empty
         elif z.key < y.key:
-            y.leftChild = z
+            y.leftChild = z #go left
             #print key, 
             #print 'inserted as a left child of ',
             #print y.key
         else:
-            y.rightChild = z
+            y.rightChild = z #go right
             #print key, 
             #print ' inserted as a right child of',
             #print y.key
@@ -192,19 +192,19 @@ class RedBlackTree:
             if z.parent == z.parent.parent.leftChild:
                 y = z.parent.parent.rightChild
                 if y.color == 'red':
-                    z.parent.color = 'black'
+                    z.parent.color = 'black'            #case 1:double red and z's uncle is red 
                     y.color = 'black'
                     z.parent.parent.color = 'red'
                     z = z.parent.parent
                 else:
-                    if z == z.parent.rightChild:
+                    if z == z.parent.rightChild:        #case 2:z's grandparent and its parent make a double red
                         z = z.parent
                         self.leftRotate(z)
-                    z.parent.color = 'black'
+                    z.parent.color = 'black'            #case 3:recolor and rotate z's parent
                     z.parent.parent.color = 'red'
                     self.rightRotate(z)
             else:
-                y = z.parent.parent.leftChild
+                y = z.parent.parent.leftChild           #same as above but with right and left reversed
                 if y.color == 'red':
                     z.parent.color = 'black'
                     y.color = 'black'
@@ -245,7 +245,7 @@ class RedBlackTree:
                     w.rightChild.color = 'black'
                     self.leftRotate(x.parent)
                     x = self.root
-            else:
+            else:                                       #same as above but with left and right reversed
                 w = x.parent.leftChild
                 if w.color == 'red':
                     w.color = 'black'
