@@ -155,74 +155,120 @@ class RedBlackTree:
         x = self.root
         z = RB_Node(key, self.sentinel, self.sentinel, self.sentinel, 'red')
 
-        #insert case for when tree is empty
-        if self.size == 0:
+        if x == None:
             self.root = z
-            self.size += 1
-            print key, 
-            print 'key inserted as root'
+            x = self.root
 
-        else:
-            while x != self.sentinel:
-                y = x
-                if z.key < x.key:
-                    x = x.leftChild
-                else:
-                    x = x.rightChild
-            z.parent = y
-            if y == self.sentinel:
-                self.root = z # case for tree being empty
-            elif z.key < y.key:
-                y.leftChild = z
-                print key, 
-                print 'inserted as a left child of ',
-                print y.key
+        while x != self.sentinel:
+            y = x
+            if z.key < x.key:
+                x = x.leftChild
             else:
-                y.rightChild = z
-                print key, 
-                print ' inserted as a right child of',
-                print y.key
-            z.leftChild = self.sentinel
-            z.rightChild = self.sentinel
-            z.color = 'red'
-            self.size += 1
-
+                x = x.rightChild
+        z.parent = y
+        if y == self.sentinel:
+            self.root = z # case for tree being empty
+        elif z.key < y.key:
+            y.leftChild = z
+            #print key, 
+            #print 'inserted as a left child of ',
+            #print y.key
+        else:
+            y.rightChild = z
+            #print key, 
+            #print ' inserted as a right child of',
+            #print y.key
+        z.leftChild = self.sentinel
+        z.rightChild = self.sentinel
+        z.color = 'red'
+        self.size += 1
+        self._rbInsertFixup(z)
                     
     def _rbInsertFixup(self, z):
-        print 'insert fixedup called' 
+        #print 'insert fixedup called' 
         # write a function to balance your tree after inserting
-        
+
+        while z.parent.color == 'red':
+            if z.parent == z.parent.parent.leftChild:
+                y = z.parent.parent.rightChild
+                if y.color == 'red':
+                    z.parent.color = 'black'
+                    y.color = 'black'
+                    z.parent.parent.color = 'red'
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.rightChild:
+                        z = z.parent
+                        self.leftRotate(z)
+                    z.parent.color = 'black'
+                    z.parent.parent.color = 'red'
+                    self.rightRotate(z)
+            else:
+                y = z.parent.parent.leftChild
+                if y.color == 'red':
+                    z.parent.color = 'black'
+                    y.color = 'black'
+                    z.parent.parent.color = 'red'
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.leftChild:
+                        z = z.parent
+                        self.rightRotate(z)
+                    z.parent.color = 'black'
+                    z.parent.parent.color = 'red'
+                    self.leftRotate(z.parent.parent)
         #case 0 - z is the root
         #color z black
-
-        #case 1 - z's uncle is red
-        #recolor z's grandparent, parent, and uncle black
-
-        #case 2 - z's uncle is black (triangle)
-        #case 2a - z is left child and z.parent is right child
-            #single rotate right z.parent
-        #case 2b - z is right child and z.parent is left child
-            #single rotate left z.parent
-
-        #case 3 - z's uncle is black (line)
-        #z and z.parent are both the same child to their
-        #respective parents
-
-            #case 3a - z and z.parent are left children
-                #rotate z.grandparent right
-                #recolor original z.parent and z.grandparent
-            #case 3a - z and z.parent are right children
-                #rotate z.grandparent left
-                #recolor original z.parent and z.grandparent
-
-        pass
+        self.root.color = 'black'
 
     def _rb_Delete_Fixup(self, x):
-        print 'delete fixup called' 
+        #print 'delete fixup called' 
         # receives a node, x, and fixes up the tree, balancing from x.
-        pass
+        while x != self.root and x.color == 'black':
+            if x == x.parent.leftChild:
+                w = x.parent.rightChild
+                if w.color == 'red':
+                    w.color = 'black'       #case 1: x's sibling w is red
+                    x.parent.color = 'red'
+                    self.leftRotate(x.parent)
+                    w = x.parent.rightChild
+                if w.left.color == 'black' and w.right.color == 'black':
+                    w.color = 'red'         #case 2:x's sibling w is black and both of
+                    x = x.parent            # w's children are black
+                elif w.rightChild.color == 'black':
+                    w.leftChild.color = 'black'         #case 3:x's sibling w is black, w.leftChild is red
+                    w.color = 'red'                     # w.rightChild is black
+                    self.rightRotate(w)
+                    w = x.parent.rightChild
+                    w.color = x.parent.color            #case 4:x's sibling is black, w's right child is red
+                    x.parent.color = 'black'
+                    w.rightChild.color = 'black'
+                    self.leftRotate(x.parent)
+                    x = self.root
+            else:
+                w = x.parent.leftChild
+                if w.color == 'red':
+                    w.color = 'black'
+                    x.parent.color = 'red'
+                    self.rightRotate(x.parent)
+                    w = x.parent.leftChild
+                if w.rightChild.color == 'black' and w.leftChild.color == 'black':
+                    w.color = 'red'
+                    x = x.parent
+                elif w.leftChild.color == 'black':
+                    w.rightChild.color = 'black'
+                    w.color = 'red'
+                    self.leftRotate(w)
+                    w = x.parent.leftChild
+                    w.color = x.parent.color
+                    x.parent.color = 'black'
+                    w.leftChild.color = 'black'
+                    self.rightRotate(x.parent)
+                    x = self.root
+        x.color = 'black'
 
-    def leftRotate(self, currentNode):
+
+    def leftRotate(self, x):
         # perform a left rotation from a given node
         y = x.rightChild #set y
         x.rightChild = y.leftChild #turn y's subtree into x's right subtree
@@ -239,7 +285,7 @@ class RedBlackTree:
         y.leftChild = x
         x.parent = y
 
-    def rightRotate(self, currentNode):
+    def rightRotate(self, x):
         # perform a right rotation from a given node
         y = x.leftChild #set y
         x.leftChild = y.rightChild #turn y's subtree into x's right subtree

@@ -2,10 +2,10 @@ insert 10
 insert 5
 insert 20
 insert 3
-traverse
+in-order
 insert 2
-traverse
+in-order
 search 17
 insert 1
 delete 20
-traverse
+in-order
